@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DecimalFormat;
 
@@ -9,6 +7,7 @@ public class UIElements {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final Color LABEL_FONT_COLOR = new Color(225,123,171);
+    private static final Color LABEL_ERROR_FONT_COLOR = new Color(234, 32, 39);
     private static final Color TEXTFIELD_BACK_COLOR = new Color(44, 62, 80);
     private static final Color WINDOW_BACK_COLOR = new Color(52, 73, 94);
     private static final Font DEAFAULT_FONT = new Font("Segoe UI", Font.BOLD, 14);
@@ -16,12 +15,14 @@ public class UIElements {
     public Window window;
     public JLabel applicationName;
     public JLabel pathInputLabel;
-    public JTextField pathInput;
-    public JButton open;
     public JLabel starInputLabel;
+    public JLabel instructionOutputLabel;
+    public JLabel starInputErrorLabel;
+    public JButton open;
+    public JButton start;
     public JSpinner starInput;
-    public JLabel instractionOutputLabel;
-    public JTextArea instractionOutput;
+    public JTextArea instructionOutput;
+    public JTextField pathInput;
 
     public UIElements() {
         this.window = new Window(WIDTH, HEIGHT, "Osu Map Filter by ikki");
@@ -52,13 +53,13 @@ public class UIElements {
 
         // UI Folder chooser button
         this.open = new JButton("BROWSE");
-        this.open.setFont(DEAFAULT_FONT);
-        this.open.setFocusPainted(false);
-        this.open.setBorder(null);
-        this.open.setBackground(TEXTFIELD_BACK_COLOR);
-        this.open.setForeground(Color.WHITE);
-        this.open.setBounds(WIDTH/6+450, 80, 80, 25);
-        this.open.addActionListener(e -> {
+        open.setFont(DEAFAULT_FONT);
+        open.setFocusPainted(false);
+        open.setBorder(null);
+        open.setBackground(TEXTFIELD_BACK_COLOR);
+        open.setForeground(Color.WHITE);
+        open.setBounds(WIDTH/6+450, 80, 80, 25);
+        open.addActionListener(e -> {
             JFileChooser folderChooser = new JFileChooser();
             folderChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop"));
             folderChooser.setDialogTitle("Choose the beatmap folder you want to filter");
@@ -87,20 +88,46 @@ public class UIElements {
         starInput.setBorder(null);
         starInput.setBounds((WIDTH/2)-50,150,100,25);
 
-        // UI display program instraction info
-        this.instractionOutputLabel = new JLabel("WHAT I'M DOING \uD83E\uDC17");
-        instractionOutputLabel.setForeground(LABEL_FONT_COLOR);
-        instractionOutputLabel.setFont(DEAFAULT_FONT);
-        instractionOutputLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        instractionOutputLabel.setBounds(WIDTH/2,300,WIDTH-(WIDTH/10),(HEIGHT/2)-(HEIGHT/10));
+        // UI input star rating error label
+        this.starInputErrorLabel = new JLabel("INVALID INPUT, MAX = 10.00");
+        starInputErrorLabel.setForeground(LABEL_ERROR_FONT_COLOR);
+        starInputErrorLabel.setFont(DEAFAULT_FONT);
+        starInputErrorLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        starInputErrorLabel.setBounds((WIDTH/2)+100,150,200,25);
 
-        this.window.add(applicationName);
-        this.window.add(pathInputLabel);
-        this.window.add(pathInput);
+        // UI display program instruction info
+        this.instructionOutputLabel = new JLabel("↓ WHAT I'M DOING ↓");
+        instructionOutputLabel.setForeground(LABEL_FONT_COLOR);
+        instructionOutputLabel.setFont(DEAFAULT_FONT);
+        instructionOutputLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        instructionOutputLabel.setBounds(WIDTH/3,225,WIDTH/3,25);
+
+        // UI display program instruction
+        this.instructionOutput = new JTextArea();
+        instructionOutput.setBackground(TEXTFIELD_BACK_COLOR);
+        instructionOutput.setForeground(LABEL_FONT_COLOR);
+        instructionOutput.setFocusable(false);
+        instructionOutput.setBounds(WIDTH/10,260,(WIDTH/10)*8,HEIGHT-(260+(2*(WIDTH/12))));
+
+        // UI start process button
+        this.start = new JButton("START");
+        start.setFont(DEAFAULT_FONT);
+        start.setFocusPainted(false);
+        start.setBorder(null);
+        start.setBackground(TEXTFIELD_BACK_COLOR);
+        start.setForeground(Color.WHITE);
+        start.setBounds((WIDTH/10)*8,HEIGHT-(WIDTH/8),80,25);
+
         this.window.add(open);
-        this.window.add(starInputLabel);
+        this.window.add(start);
         this.window.add(starInput);
-        this.window.add(instractionOutputLabel);
+        this.window.add(pathInput);
+        this.window.add(starInputLabel);
+        this.window.add(pathInputLabel);
+        this.window.add(applicationName);
+        this.window.add(instructionOutput);
+        this.window.add(starInputErrorLabel);
+        this.window.add(instructionOutputLabel);
         this.window.setVisible(true);
     }
 }

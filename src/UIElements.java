@@ -17,12 +17,13 @@ public class UIElements {
     public JLabel pathInputLabel;
     public JLabel starInputLabel;
     public JLabel instructionOutputLabel;
-    public JLabel starInputErrorLabel;
+    public JPanel instructionOutputPanel;
     public JButton open;
     public JButton start;
     public JSpinner starInput;
     public JTextArea instructionOutput;
     public JTextField pathInput;
+    public JScrollPane scroll;
 
     public UIElements() {
         this.window = new Window(WIDTH, HEIGHT, "Osu Map Filter by ikki");
@@ -77,23 +78,17 @@ public class UIElements {
 
         // UI input star rating
         this.starInput = new JSpinner();
-        starInput.setModel(new SpinnerNumberModel((float)0, (float)0, (float)10, (float)0.01));
+        starInput.setModel(new SpinnerNumberModel((float)0, (float)0, (float)10, (float)0.5));
         JSpinner.NumberEditor editor = (JSpinner.NumberEditor)starInput.getEditor();
         DecimalFormat format = editor.getFormat();
         format.setMinimumFractionDigits(2);
         editor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
+        editor.getTextField().setEditable(false);
         editor.getComponent(0).setBackground(TEXTFIELD_BACK_COLOR);
         editor.getComponent(0).setForeground(Color.WHITE);
         editor.getComponent(0).setFont(DEAFAULT_FONT);
         starInput.setBorder(null);
         starInput.setBounds((WIDTH/2)-50,150,100,25);
-
-        // UI input star rating error label
-        this.starInputErrorLabel = new JLabel("INVALID INPUT, MAX = 10.00");
-        starInputErrorLabel.setForeground(LABEL_ERROR_FONT_COLOR);
-        starInputErrorLabel.setFont(DEAFAULT_FONT);
-        starInputErrorLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        starInputErrorLabel.setBounds((WIDTH/2)+100,150,200,25);
 
         // UI display program instruction info
         this.instructionOutputLabel = new JLabel("↓ WHAT I'M DOING ↓");
@@ -102,12 +97,26 @@ public class UIElements {
         instructionOutputLabel.setHorizontalAlignment(SwingConstants.CENTER);
         instructionOutputLabel.setBounds(WIDTH/3,225,WIDTH/3,25);
 
+        // UI display instructionOutput panel
+        this.instructionOutputPanel = new JPanel();
+        instructionOutputPanel.setLayout(new FlowLayout());
+        instructionOutputPanel.setBackground(WINDOW_BACK_COLOR);
+        instructionOutputPanel.setBounds(WIDTH/10,260,(WIDTH/10)*8,HEIGHT-(260+(2*(WIDTH/13))));
+
         // UI display program instruction
         this.instructionOutput = new JTextArea();
         instructionOutput.setBackground(TEXTFIELD_BACK_COLOR);
         instructionOutput.setForeground(LABEL_FONT_COLOR);
-        instructionOutput.setFocusable(false);
-        instructionOutput.setBounds(WIDTH/10,260,(WIDTH/10)*8,HEIGHT-(260+(2*(WIDTH/12))));
+        instructionOutput.setAutoscrolls(true);
+        instructionOutput.setEditable(false);
+        instructionOutput.setBounds(0,0,(WIDTH/10)*8,HEIGHT-(260+(2*(WIDTH/12))));
+
+        // UI scrollpane textarea
+        this.scroll = new JScrollPane (instructionOutput);
+        scroll.setPreferredSize(new Dimension((WIDTH/10)*8,HEIGHT-(260+(2*(WIDTH/12)))));
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        instructionOutputPanel.add(scroll);
 
         // UI start process button
         this.start = new JButton("START");
@@ -117,6 +126,10 @@ public class UIElements {
         start.setBackground(TEXTFIELD_BACK_COLOR);
         start.setForeground(Color.WHITE);
         start.setBounds((WIDTH/10)*8,HEIGHT-(WIDTH/8),80,25);
+        start.addActionListener(e -> {
+            if(pathInput.getText().length() > 0 && new File(pathInput.getText()).exists() && new File(pathInput.getText()).isDirectory())
+                new ProcessThread(pathInput.getText(), instructionOutput).start();
+        });
 
         this.window.add(open);
         this.window.add(start);
@@ -125,9 +138,8 @@ public class UIElements {
         this.window.add(starInputLabel);
         this.window.add(pathInputLabel);
         this.window.add(applicationName);
-        this.window.add(instructionOutput);
-        this.window.add(starInputErrorLabel);
         this.window.add(instructionOutputLabel);
+        this.window.add(instructionOutputPanel);
         this.window.setVisible(true);
     }
 }

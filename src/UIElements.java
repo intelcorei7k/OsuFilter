@@ -7,7 +7,6 @@ public class UIElements {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
     private static final Color LABEL_FONT_COLOR = new Color(225,123,171);
-    private static final Color LABEL_ERROR_FONT_COLOR = new Color(234, 32, 39);
     private static final Color TEXTFIELD_BACK_COLOR = new Color(44, 62, 80);
     private static final Color WINDOW_BACK_COLOR = new Color(52, 73, 94);
     private static final Font DEAFAULT_FONT = new Font("Segoe UI", Font.BOLD, 14);

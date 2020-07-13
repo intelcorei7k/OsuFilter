@@ -61,7 +61,7 @@ public class UIElements {
         open.setBounds(WIDTH/6+450, 80, 80, 25);
         open.addActionListener(e -> {
             JFileChooser folderChooser = new JFileChooser();
-            folderChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop"));
+            folderChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/AppData/Local/osu!"));
             folderChooser.setDialogTitle("Choose the beatmap folder you want to filter");
             folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             if(folderChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)

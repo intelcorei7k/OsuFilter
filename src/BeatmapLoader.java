@@ -1,7 +1,9 @@
 import java.io.*;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BeatmapLoader {
@@ -28,8 +30,8 @@ public class BeatmapLoader {
         return result;
     }
 
-    public static void bmDifficultyCalculator(int id) throws IOException, InterruptedException {
-
+    public static float bmDifficultyCalculator(int id) throws IOException, InterruptedException {
+        float result = -1;
         try {
             String url = "http://localhost:3000/" + id;
             LOCAL_SERVER_KEY = new URL(url);
@@ -46,9 +48,12 @@ public class BeatmapLoader {
                     responseContent.append(line);
                 }
                 buffer.close();
-                System.out.println(responseContent);
+                System.out.println(responseContent.substring(9, responseContent.length()-1));
+                result = Float.parseFloat(responseContent.substring(9, responseContent.length()-1));
+                result = Float.parseFloat(new DecimalFormat("0.00").format(result).replace(",","."));
             }
         } catch (SocketTimeoutException e) { System.out.println(e.getMessage()); }
         Thread.sleep(20);
+        return result;
     }
 }

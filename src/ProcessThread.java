@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ProcessThread extends Thread{
     JTextArea instructionTextArea;
@@ -19,18 +20,22 @@ public class ProcessThread extends Thread{
         this.beatmapFolders = mapsFolder.list((dir, name) -> {
             File temp = new File(dir, name);
             if(temp.isDirectory()) {
-                String beatmapIdString = null;
-                int beatmapId = -1;
+                ArrayList<String> beatmapIdString;
+                ArrayList<Integer> beatmapId = new ArrayList<>();
                 try {
                     beatmapIdString = BeatmapLoader.bmIdLoader(temp);
-                    if(beatmapIdString == null) beatmapId = -1;
+                    if(beatmapIdString == null || beatmapIdString.size() == 0) beatmapId = null;
                     else {
-                        beatmapId = Integer.parseInt(beatmapIdString.substring(10));
-                        BeatmapLoader.bmDifficultyCalculator(beatmapId);
+                        for(String s : beatmapIdString) {
+                            beatmapId.add(Integer.parseInt(s.substring(10)));
+                            BeatmapLoader.bmDifficultyCalculator(beatmapId.get(beatmapId.size()-1));
+                        }
                     }
                 } catch (IOException | InterruptedException e) { e.printStackTrace(); }
                 this.instructionTextArea.setText(instructionTextArea.getText() + "\n" + temp.getName());
-                if(beatmapId > 0) this.instructionTextArea.setText(instructionTextArea.getText() + " ID: " + beatmapId);
+                if(beatmapId != null)
+                    for(Integer i : beatmapId)
+                        if(i > 0) this.instructionTextArea.setText(instructionTextArea.getText() + "\n\t" + " ID: " + i);
                 this.instructionTextArea.setCaretPosition(instructionTextArea.getDocument().getLength() - 1);
                 return true;
             }

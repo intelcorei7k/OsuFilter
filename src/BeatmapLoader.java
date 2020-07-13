@@ -48,7 +48,7 @@ public class BeatmapLoader {
                     responseContent.append(line);
                 }
                 buffer.close();
-                System.out.println(responseContent.substring(9, responseContent.length()-1));
+                // System.out.println(responseContent.substring(9, responseContent.length()-1));
                 result = Float.parseFloat(responseContent.substring(9, responseContent.length()-1));
                 result = Float.parseFloat(new DecimalFormat("0.00").format(result).replace(",","."));
             }

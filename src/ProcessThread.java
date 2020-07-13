@@ -1,16 +1,18 @@
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class ProcessThread extends Thread{
     JTextArea instructionTextArea;
     String folderPath;
     String[] beatmapFolders;
+    Float maxAcceptedDiffuculty;
+    int validBeatmapCounter;
 
-    public ProcessThread(String targetFolder, JTextArea textArea){
+    public ProcessThread(String targetFolder, JTextArea textArea, Float maxAcceptedDiffuculty){
         this.instructionTextArea = textArea;
         this.folderPath = targetFolder.replace("\\", "/") + "/";
+        this.maxAcceptedDiffuculty = maxAcceptedDiffuculty;
     }
 
     @Override
@@ -37,9 +39,18 @@ public class ProcessThread extends Thread{
                         }
                     }
                 } catch (IOException | InterruptedException e) { e.printStackTrace(); }
-                return true;
+                for(Float f : data.difficulty) {
+                    if (f >= this.maxAcceptedDiffuculty) {
+                        validBeatmapCounter++;
+                        return true;
+                    }
+                }
             }
             return false; });
-
+        for(String s : this.beatmapFolders)
+            System.out.println(s);
+        System.out.println("Number of valid maps: " + this.validBeatmapCounter);
+        this.instructionTextArea.setText(instructionTextArea.getText() + "\n\n" +
+                "Number of valid ranked beatmap found: " + this.validBeatmapCounter);
     }
 }

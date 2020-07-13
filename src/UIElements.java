@@ -127,7 +127,9 @@ public class UIElements {
         start.setBounds((WIDTH/10)*8,HEIGHT-(WIDTH/8),80,25);
         start.addActionListener(e -> {
             if(pathInput.getText().length() > 0 && new File(pathInput.getText()).exists() && new File(pathInput.getText()).isDirectory())
-                new ProcessThread(pathInput.getText(), instructionOutput).start();
+                new ProcessThread(pathInput.getText(), instructionOutput,
+                        Float.parseFloat(((JSpinner.NumberEditor) starInput.getEditor()).getTextField().getText().replace(",",".")))
+                        .start();
         });
 
         this.window.add(open);

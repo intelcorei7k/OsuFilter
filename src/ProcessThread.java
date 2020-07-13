@@ -25,18 +25,18 @@ public class ProcessThread extends Thread{
                     data.idInfo = BeatmapLoader.bmIdLoader(temp);
                     if(data.idInfo == null || data.idInfo.size() == 0) data.id = null;
                     else {
+                        this.instructionTextArea.setText(instructionTextArea.getText() + "\n" + temp.getName());
                         for(String s : data.idInfo) {
                             data.id.add(Integer.parseInt(s.substring(10)));
                             data.difficulty.add(BeatmapLoader.bmDifficultyCalculator(data.id.get(data.id.size()-1)));
+                            if(data.id != null && data.difficulty.get(data.difficulty.size()-1) > 0)
+                                this.instructionTextArea.setText(instructionTextArea.getText() + "\n\t" + " ID: "
+                                        + data.id.get(data.id.size()-1) + "\tSTAR RATING: "
+                                        + data.difficulty.get(data.difficulty.size()-1));
+                            this.instructionTextArea.setCaretPosition(instructionTextArea.getDocument().getLength() - 1);
                         }
                     }
                 } catch (IOException | InterruptedException e) { e.printStackTrace(); }
-                this.instructionTextArea.setText(instructionTextArea.getText() + "\n" + temp.getName());
-                if(data.id != null)
-                    for(Integer i : data.id)
-                        if(i > 0) this.instructionTextArea.setText(instructionTextArea.getText() + "\n\t" + " ID: " + i
-                            + "\tSTAR RATING: " + data.difficulty.get(data.id.indexOf(i)));
-                this.instructionTextArea.setCaretPosition(instructionTextArea.getDocument().getLength() - 1);
                 return true;
             }
             return false; });

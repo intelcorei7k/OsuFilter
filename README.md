@@ -1,4 +1,4 @@
 # OsuFilter
-<b>A program that allows you to filter you osu! maps by their star rating</b>
+<b>Un programma per filtrare le mappe di osu in base all loro rating</b>
 
-<b>Currently broken by the rework</b>
+<b>Attualmente non funzionante per via del rework</b>
